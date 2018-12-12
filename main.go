@@ -25,17 +25,19 @@ func FizzBuzz(string1 string, string2 string, int1 int, int2 int, limit int) ([]
 	}
 
 	var result []string
-	string1string2 := string1 + string2
 	for i := 1; i <= limit; i++ {
-		if i%int1 == 0 && i%int2 == 0 {
-			result = append(result, string1string2)
-		} else if i%int1 == 0 {
-			result = append(result, string1)
-		} else if i%int2 == 0 {
-			result = append(result, string2)
-		} else {
-			result = append(result, strconv.Itoa(i))
+		var item string
+		if i%int1 == 0 {
+			item += string1
 		}
+		if i%int2 == 0 {
+			item += string2
+		}
+		if item == "" {
+			item = strconv.Itoa(i)
+		}
+
+		result = append(result, item)
 	}
 
 	return result, nil
