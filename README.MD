@@ -11,7 +11,7 @@ It must return a list of strings with numbers from 1 to **limit**, where:
 go run main.go
 ```
 
-Then you can try in your browser : http://localhost:8080/artem?string1=fizz&string2=buzz&int1=3&int2=5&limit=15
+Then you can try in your browser : http://localhost:8080/?string1=fizz&string2=buzz&int1=3&int2=5&limit=15
 
 ## Tests
 
