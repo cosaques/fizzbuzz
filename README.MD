@@ -13,6 +13,15 @@ go run main.go
 
 Then you can try in your browser : http://localhost:8080/?string1=fizz&string2=buzz&int1=3&int2=5&limit=15
 
+## Docker
+
+If **go** is not installed on your machine, you can run the server via Docker :
+
+```bash
+docker build . -t fizzbuzz
+docker run -p 8080:8080 fizzbuzz
+```
+
 ## Tests
 
 To run all unit-tests :
