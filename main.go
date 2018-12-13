@@ -3,12 +3,68 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
+	"net/http"
 	"strconv"
 )
 
+func handler(w http.ResponseWriter, r *http.Request) {
+	var int1, int2, limit int
+	var string1, string2 string
+	if err := getParams(r, &string1, &string2, &int1, &int2, &limit); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	fmt.Fprintf(w, "%s, %s, %d, %d, %d", string1, string2, int1, int2, limit)
+}
+
 func main() {
-	fizzbuzz, _ := FizzBuzz("fizz", "buzz", 3, 5, 15)
-	fmt.Println(fizzbuzz)
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func getParams(r *http.Request, string1 *string, string2 *string, int1 *int, int2 *int, limit *int) error {
+	var err error
+
+	if *string1, err = getStrParam(r, "string1"); err != nil {
+		return err
+	}
+
+	if *string2, err = getStrParam(r, "string2"); err != nil {
+		return err
+	}
+
+	if *int1, err = getIntParam(r, "int1"); err != nil {
+		return err
+	}
+
+	if *int2, err = getIntParam(r, "int2"); err != nil {
+		return err
+	}
+
+	if *limit, err = getIntParam(r, "limit"); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func getStrParam(r *http.Request, key string) (string, error) {
+	if params, ok := r.URL.Query()[key]; ok && len(params) > 0 {
+		return params[0], nil
+	}
+	return "", fmt.Errorf("Parameter \"%s\" is not set", key)
+}
+
+func getIntParam(r *http.Request, key string) (int, error) {
+	if params, ok := r.URL.Query()[key]; ok && len(params) > 0 {
+		v, err := strconv.Atoi(params[0])
+		if err != nil {
+			return 0, err
+		}
+		return v, nil
+	}
+	return 0, fmt.Errorf("Parameter \"%s\" is not set", key)
 }
 
 // FizzBuzz build a list of numbers from 1 to limit, where
